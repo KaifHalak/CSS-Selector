@@ -15,5 +15,5 @@
   "action": {
     "default_title": "Css Selector"
   },
-  "permissions": ["storage", "activeTab", "scripting"]
+  "permissions": ["storage", "activeTab", "scripting", "debugger"]
 }
