@@ -1,0 +1,5 @@
+.A .C means that C is a child of A 
+
+.A.C means that the element has both classes A and C
+
+(also applies to .A#C) (the first 2 rules)

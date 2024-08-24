@@ -3,6 +3,7 @@
 import express from 'express';
 import http from 'http';
 import cors from 'cors';
+import sampleCSS from './temp.mjs';
 
 const app = express();
 const server = http.createServer(app);
@@ -20,10 +21,12 @@ server.listen(PORT, () => {
 // TODO: Config cors and error handling
 // TODO: minify the css if its not already
 
-const cssTest =
-  '#content,#livePreview,.bootstrapMenu a,.bootstrapMenu span{cursor:default}#content,#liveFrame,.sidebar,body,html{height:100%}#errorMessage,.sidebar{color:#fff}#editableDiv,.highlightedCode,body{word-wrap:break-word}body{margin:0}.sidebar{text-align:center;padding:8px;position:fixed;z-index:10;top:0;border-right:1px solid #000;width:200px;background-color:#333;display:flex;flex-direction:column}';
-
 app.post('/', async (req, res, next) => {
+  res.json(sampleCSS);
+  return;
+
+  console.log('Hello');
+
   let allURLsList = req.body;
 
   let finalPayload = [];
@@ -39,7 +42,7 @@ app.post('/', async (req, res, next) => {
 
     finalPayload.push(cssMap);
   }
-  
+
   res.json(finalPayload);
   return;
 });
