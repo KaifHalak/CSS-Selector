@@ -7,19 +7,58 @@
 // TODO: Fastest search algo. (or use array or object (obj vs map))
 // TODO: Memory management and css parser?
 // TODO: All css files: stylesheets (<link>, <style>) and inline styles
+// TODO: is constantly adding  / removing event listener efficeint?
 
 import { ElementPicker } from 'pick-dom-element';
 
 console.log('CONTENT SCRIPT RUNNING');
 
-const CSS_MAP = GetCSSMap();
+MessagesFromBackground();
+
+const pickerStyle = { borderColor: '#0000ff' };
+
+// True - Active, False - Inactive
+let pickerStatus = true;
+
+const picker = new ElementPicker({ style: pickerStyle });
+StartPicker();
+
+function HandleEscKeyPress(event) {
+  if (event.key === 'Escape' || event.keyCode === 27) {
+    TogglePicker();
+  }
+}
+
+// const CSS_MAP = GetCSSMap();
+const CSS_MAP = [];
 
 function OnHoverElement(element) {
   console.log(`Hover: ${element}`);
 }
 
 function OnClickElement(element) {
+  TogglePicker();
+}
+
+function StopPicker() {
   picker.stop();
+  document.removeEventListener('keydown', HandleEscKeyPress);
+  console.log('Picker Stopped');
+}
+
+function StartPicker() {
+  document.addEventListener('keydown', HandleEscKeyPress);
+  picker.start({
+    onHover: OnHoverElement,
+    onClick: OnClickElement,
+  });
+  console.log('Picker Started');
+}
+
+function TogglePicker() {
+  pickerStatus ? StopPicker() : StartPicker();
+  pickerStatus = !pickerStatus;
+  console.log('Picker Toggled');
 }
 
 async function GetCSSMap() {
@@ -43,18 +82,13 @@ async function GetCSSMap() {
   return cssMap;
 }
 
-function main() {
-  if (!CSS_MAP) {
-    alert('Please Wait');
-    return;
-  }
+function MessagesFromBackground() {
+  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    let messageType = message.type;
 
-  const style = { borderColor: '#0000ff' };
-  const picker = new ElementPicker({ style });
-  picker.start({
-    onHover: OnHoverElement,
-    onClick: OnClickElement,
+    if (messageType === 'CONTENT_SCRIPT_STATUS') {
+      sendResponse({ status: 'active' });
+      TogglePicker();
+    }
   });
 }
-
-main();
