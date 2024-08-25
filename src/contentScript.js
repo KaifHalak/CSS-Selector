@@ -8,6 +8,9 @@
 // TODO: Memory management and css parser?
 // TODO: All css files: stylesheets (<link>, <style>) and inline styles
 // TODO: is constantly adding  / removing event listener efficeint?
+// TODO: look for styles for element specific, inherits, and *
+// TODO: take into acct the browser support
+// TODO: Copy HTML with styling in the style tag
 
 import { ElementPicker } from 'pick-dom-element';
 
@@ -29,14 +32,14 @@ function HandleEscKeyPress(event) {
   }
 }
 
-// const CSS_MAP = GetCSSMap();
-const CSS_MAP = [];
 
 function OnHoverElement(element) {
-  console.log(`Hover: ${element}`);
+  // console.log(`Hover: ${element}`);
 }
 
 function OnClickElement(element) {
+  console.log(element);
+  console.log(GetAppliedComputedStyles(element))
   TogglePicker();
 }
 
@@ -61,27 +64,6 @@ function TogglePicker() {
   console.log('Picker Toggled');
 }
 
-async function GetCSSMap() {
-  const linkElements = document.querySelectorAll('link[rel="stylesheet"]');
-  let allURLsList = Array.from(linkElements).map(
-    (linkElement) => linkElement.href
-  );
-
-  const serverURL = 'http://localhost:3000/';
-  let response = await fetch(serverURL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json', // Indicate that the payload is JSON
-    },
-    body: JSON.stringify(allURLsList),
-  });
-  const cssMap = await response.json();
-
-  console.log('==== CSS MAP Loaded ====');
-
-  return cssMap;
-}
-
 function MessagesFromBackground() {
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     let messageType = message.type;
@@ -91,4 +73,54 @@ function MessagesFromBackground() {
       TogglePicker();
     }
   });
+}
+
+function GetAppliedComputedStyles(element, pseudo = '') {
+  var styles = window.getComputedStyle(element, pseudo);
+
+  var inlineStyles = element.getAttribute('style');
+  var appliedStyles = {};
+
+  for (var i = 0; i < styles.length; i++) {
+    var key = styles[i];
+    var value = styles.getPropertyValue(key);
+
+    element.style.setProperty(key, 'unset');
+
+    var unsetValue = styles.getPropertyValue(key);
+
+    if (inlineStyles) element.setAttribute('style', inlineStyles);
+    else element.removeAttribute('style');
+
+    // When an attr is set to "unset", one of 2 things happen:
+    // 1. The attribute value is changed to any inherited value
+    // 2. If there is no inherited value, it is set to the default CSS value (this also depends case to case bcs some styles like font-size will remain the same)
+
+    if (unsetValue !== value) appliedStyles[key] = value;
+  }
+
+  let allInlineStyles = {}
+
+  if (inlineStyles){
+    allInlineStyles = InlineTextToObject(element);
+  }
+
+
+  return {...appliedStyles, ...allInlineStyles};
+}
+
+function InlineTextToObject(element) {
+  var inlineStyles = element.getAttribute('style');
+  let splitStyles = inlineStyles.split(/[:;|]/).filter((value) => value ? value : '');
+  
+  let allInlineStyles = {}
+
+  for (let i = 0; i < splitStyles.length; i += 2) {
+    let attr = splitStyles[i].trim();
+    let value = splitStyles[i + 1].trim();
+
+    allInlineStyles[attr] = value
+  }
+
+  return allInlineStyles
 }
