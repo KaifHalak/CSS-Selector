@@ -3,3 +3,10 @@
 .A.C means that the element has both classes A and C
 
 (also applies to .A#C) (the first 2 rules)
+
+=====
+what did I learn:
+
+- CORS is only applied in browsers
+- unset keyword for css
+- chrome debugger
