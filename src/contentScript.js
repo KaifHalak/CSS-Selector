@@ -1,4 +1,4 @@
-'use strict';
+"use strict"
 
 // TODO: What if the body is streambale?
 // TODO: Fetch inline styles
@@ -12,115 +12,120 @@
 // TODO: take into acct the browser support
 // TODO: Copy HTML with styling in the style tag
 
-import { ElementPicker } from 'pick-dom-element';
+import { ElementPicker } from "pick-dom-element"
+import FormatCSS from "./utils/logicalToTraditionalCSS.js"
 
-console.log('CONTENT SCRIPT RUNNING');
+console.log("CONTENT SCRIPT RUNNING")
 
-MessagesFromBackground();
+MessagesFromBackground()
 
-const pickerStyle = { borderColor: '#0000ff' };
+const pickerStyle = { borderColor: "#0000ff" }
 
 // True - Active, False - Inactive
-let pickerStatus = true;
+let pickerStatus = true
 
-const picker = new ElementPicker({ style: pickerStyle });
-StartPicker();
+const picker = new ElementPicker({ style: pickerStyle })
+StartPicker()
 
 function HandleEscKeyPress(event) {
-  if (event.key === 'Escape' || event.keyCode === 27) {
-    TogglePicker();
+  if (event.key === "Escape" || event.keyCode === 27) {
+    TogglePicker()
   }
 }
-
 
 function OnHoverElement(element) {
   // console.log(`Hover: ${element}`);
 }
 
 function OnClickElement(element) {
-  console.log(element);
-  console.log(GetAppliedComputedStyles(element))
-  TogglePicker();
+  TogglePicker()
+  
+  console.log(element)
+  const styling = GetAppliedComputedStyles(element)
+
+  const formatStyling = FormatCSS(styling)
+  console.log(formatStyling)
 }
 
 function StopPicker() {
-  picker.stop();
-  document.removeEventListener('keydown', HandleEscKeyPress);
-  console.log('Picker Stopped');
+  picker.stop()
+  document.removeEventListener("keydown", HandleEscKeyPress)
+  console.log("Picker Stopped")
 }
 
 function StartPicker() {
-  document.addEventListener('keydown', HandleEscKeyPress);
+  document.addEventListener("keydown", HandleEscKeyPress)
   picker.start({
     onHover: OnHoverElement,
     onClick: OnClickElement,
-  });
-  console.log('Picker Started');
+  })
+  console.log("Picker Started")
 }
 
 function TogglePicker() {
-  pickerStatus ? StopPicker() : StartPicker();
-  pickerStatus = !pickerStatus;
-  console.log('Picker Toggled');
+  pickerStatus ? StopPicker() : StartPicker()
+  pickerStatus = !pickerStatus
+  console.log("Picker Toggled")
 }
 
 function MessagesFromBackground() {
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    let messageType = message.type;
+    let messageType = message.type
 
-    if (messageType === 'CONTENT_SCRIPT_STATUS') {
-      sendResponse({ status: 'active' });
-      TogglePicker();
+    if (messageType === "CONTENT_SCRIPT_STATUS") {
+      sendResponse({ status: "active" })
+      TogglePicker()
     }
-  });
+  })
 }
 
-function GetAppliedComputedStyles(element, pseudo = '') {
-  var styles = window.getComputedStyle(element, pseudo);
+function GetAppliedComputedStyles(element, pseudo = "") {
+  var styles = window.getComputedStyle(element, pseudo)
 
-  var inlineStyles = element.getAttribute('style');
-  var appliedStyles = {};
+  var inlineStyles = element.getAttribute("style")
+  var appliedStyles = {}
 
   for (var i = 0; i < styles.length; i++) {
-    var key = styles[i];
-    var value = styles.getPropertyValue(key);
+    var styleKey = styles[i]
+    var value = styles.getPropertyValue(styleKey)
 
-    element.style.setProperty(key, 'unset');
+    // Adding !important is impo as the value may not set to default if the existing value is !important for a style
+    element.style.setProperty(styleKey, "unset", "important")
 
-    var unsetValue = styles.getPropertyValue(key);
+    var unsetValue = styles.getPropertyValue(styleKey)
 
-    if (inlineStyles) element.setAttribute('style', inlineStyles);
-    else element.removeAttribute('style');
+    if (inlineStyles) element.setAttribute("style", inlineStyles)
+    else element.removeAttribute("style")
 
     // When an attr is set to "unset", one of 2 things happen:
     // 1. The attribute value is changed to any inherited value
     // 2. If there is no inherited value, it is set to the default CSS value (this also depends case to case bcs some styles like font-size will remain the same)
 
-    if (unsetValue !== value) appliedStyles[key] = value;
+    if (unsetValue !== value) appliedStyles[styleKey] = value
   }
 
   let allInlineStyles = {}
 
-  if (inlineStyles){
-    allInlineStyles = InlineTextToObject(element);
+  if (inlineStyles) {
+    allInlineStyles = InlineTextToObject(element)
   }
 
-
-  return {...appliedStyles, ...allInlineStyles};
+  return { ...appliedStyles, ...allInlineStyles }
 }
 
 function InlineTextToObject(element) {
-  var inlineStyles = element.getAttribute('style');
-  let splitStyles = inlineStyles.split(/[:;|]/).filter((value) => value ? value : '');
-  
+  var inlineStyles = element.getAttribute("style")
+  let splitStyles = inlineStyles
+    .split(/[:;|]/)
+    .filter((value) => (value ? value : ""))
+
   let allInlineStyles = {}
 
   for (let i = 0; i < splitStyles.length; i += 2) {
-    let attr = splitStyles[i].trim();
-    let value = splitStyles[i + 1].trim();
+    let attr = splitStyles[i].trim()
+    let value = splitStyles[i + 1].trim()
 
     allInlineStyles[attr] = value
   }
-
   return allInlineStyles
 }
