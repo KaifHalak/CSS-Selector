@@ -120,10 +120,41 @@ function FormatFourSideStyles(style) {
   return formattedStyle
 }
 
+function EdgeCases(style) {
+  // border-radius
+
+  let stylesWhichHaveTheKeywordValues = {}
+  let formattedStyles = {}
+
+  let allStyleEntries = Object.entries(style)
+  allStyleEntries.forEach(([styleKey, value]) => {
+    if (styleKey.includes("border") && styleKey.includes("radius")) {
+      stylesWhichHaveTheKeywordValues[styleKey] = value
+    } else {
+      formattedStyles[styleKey] = value
+    }
+  })
+  let allBorderRadiusValues = Object.values(stylesWhichHaveTheKeywordValues)
+  const uniqueValues = new Set(allBorderRadiusValues)
+
+  if (uniqueValues.size === 1 && allBorderRadiusValues.length == 4) {
+    formattedStyles["border-radius"] = uniqueValues.values().next().value
+  } else {
+    Object.entries(stylesWhichHaveTheKeywordValues).forEach(
+      ([styleKey, value]) => {
+        formattedStyles[styleKey] = value
+      }
+    )
+  }
+
+  return formattedStyles
+}
+
 function FormatCSS(styles) {
   let formattedStyles = SwapToTraditionalCSS(styles)
   formattedStyles = CleanUp(formattedStyles)
   formattedStyles = FormatFourSideStyles(formattedStyles)
+  formattedStyles = EdgeCases(formattedStyles)
   return formattedStyles
 }
 

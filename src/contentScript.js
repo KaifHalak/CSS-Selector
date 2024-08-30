@@ -11,6 +11,8 @@
 // TODO: look for styles for element specific, inherits, and *
 // TODO: take into acct the browser support
 // TODO: Copy HTML with styling in the style tag
+// TODO: Clipboard does not work on http
+// TODO: Sometimes styles which were not there before are added to the obj
 
 import { ElementPicker } from "pick-dom-element"
 import FormatCSS from "./utils/logicalToTraditionalCSS.js"
@@ -39,11 +41,12 @@ function OnHoverElement(element) {
 
 function OnClickElement(element) {
   TogglePicker()
-  
   console.log(element)
   const styling = GetAppliedComputedStyles(element)
-
   const formatStyling = FormatCSS(styling)
+
+  CopyHTML(element, formatStyling, false)
+
   console.log(formatStyling)
 }
 
@@ -128,4 +131,72 @@ function InlineTextToObject(element) {
     allInlineStyles[attr] = value
   }
   return allInlineStyles
+}
+
+
+
+
+function CopyHTML(originalElement, styling, copyChildElements) {
+  let elementCopy = originalElement.cloneNode(copyChildElements)
+
+  let allStylings = Object.entries(styling)
+
+  allStylings.forEach(([styleKey, value]) => {
+    elementCopy.style[styleKey] = value
+  })
+
+  if (copyChildElements) {
+    elementCopy = RecursivelyApplyStylesToAllChildElements(
+      originalElement,
+      elementCopy
+    )[1]
+  }
+
+  CopyToClipboard(elementCopy.outerHTML)
+}
+
+function RecursivelyApplyStylesToAllChildElements(
+  originalElement,
+  elementCopy
+) {
+  if (!elementCopy.children) {
+    return [originalElement, elementCopy]
+  }
+
+  for (
+    let downTree = 0;
+    downTree < Array.from(elementCopy.children).length - 1;
+    downTree++
+  ) {
+    let originalChildElement = Array.from(originalElement.children)[downTree]
+    let copyChildElement = Array.from(elementCopy.children)[downTree]
+
+    let [downMostOriginalChildElement, downMostCopyChildElement] =
+      RecursivelyApplyStylesToAllChildElements(
+        originalChildElement,
+        copyChildElement
+      )
+
+    let styling = GetAppliedComputedStyles(downMostOriginalChildElement)
+    let formatStyling = FormatCSS(styling)
+
+    let allStylings = Object.entries(formatStyling)
+
+    allStylings.forEach(([styleKey, value]) => {
+      downMostCopyChildElement.style[styleKey] = value
+    })
+  }
+
+  return [originalElement, elementCopy]
+}
+
+function CopyToClipboard(text) {
+  navigator.clipboard.writeText(text).then(
+    () => {
+      console.log("Text copied to clipboard successfully!")
+    },
+    (err) => {
+      console.error("Failed to copy text: ", err)
+    }
+  )
 }
