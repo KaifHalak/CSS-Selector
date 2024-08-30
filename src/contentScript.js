@@ -18,6 +18,7 @@
 import { ElementPicker } from "pick-dom-element"
 import FormatCSS from "./utils/logicalToTraditionalCSS.js"
 import ConvertCSSToTw from "./utils/CSSToTW.js"
+import ConvertHTMLToJSX from "./utils/HTMLToJSX.js"
 
 console.log("CONTENT SCRIPT RUNNING")
 
@@ -47,7 +48,13 @@ async function OnClickElement(element) {
   const styling = GetAppliedComputedStyles(element)
   const formatStyling = FormatCSS(styling)
 
-  // CopyHTML(element, formatStyling, false)
+  CopyHTML(element, formatStyling, false)
+
+  let jsx = ConvertHTMLToJSX(element, false)
+  
+  console.log("JSX: ")
+  console.log(jsx)
+
   // let css = ""
   // Object.entries(formatStyling).forEach(([key, value]) => {
   //   css = css + `${key}: ${value}; \n`
@@ -143,7 +150,7 @@ function InlineTextToObject(element) {
   return allInlineStyles
 }
 
-function CopyHTML(originalElement, styling, copyChildElements) {
+function CopyHTML(originalElement, styling, copyChildElements = false) {
   let elementCopy = originalElement.cloneNode(copyChildElements)
 
   let allStylings = Object.entries(styling)
