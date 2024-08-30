@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "cors": "^2.8.5",
-    "css-to-tailwind-translator": "^1.2.8",
+    "css-to-tailwindcss": "^1.0.5",
     "express": "^4.19.2",
     "pick-dom-element": "^0.2.3"
   }

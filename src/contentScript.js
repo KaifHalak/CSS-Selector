@@ -1,4 +1,5 @@
 "use strict"
+// https://github.com/hmarr/pick-dom-element/blob/main/package.json
 
 // TODO: What if the body is streambale?
 // TODO: Fetch inline styles
@@ -16,6 +17,7 @@
 
 import { ElementPicker } from "pick-dom-element"
 import FormatCSS from "./utils/logicalToTraditionalCSS.js"
+import ConvertCSSToTw from "./utils/CSSToTW.js"
 
 console.log("CONTENT SCRIPT RUNNING")
 
@@ -39,15 +41,23 @@ function OnHoverElement(element) {
   // console.log(`Hover: ${element}`);
 }
 
-function OnClickElement(element) {
+async function OnClickElement(element) {
   TogglePicker()
   console.log(element)
   const styling = GetAppliedComputedStyles(element)
   const formatStyling = FormatCSS(styling)
 
-  CopyHTML(element, formatStyling, false)
+  // CopyHTML(element, formatStyling, false)
+  // let css = ""
+  // Object.entries(formatStyling).forEach(([key, value]) => {
+  //   css = css + `${key}: ${value}; \n`
+  // })
 
   console.log(formatStyling)
+
+  let tailwindStyles = await ConvertCSSToTw(formatStyling)
+  console.log("Tailwind: \n")
+  console.log(tailwindStyles)
 }
 
 function StopPicker() {
@@ -132,9 +142,6 @@ function InlineTextToObject(element) {
   }
   return allInlineStyles
 }
-
-
-
 
 function CopyHTML(originalElement, styling, copyChildElements) {
   let elementCopy = originalElement.cloneNode(copyChildElements)
