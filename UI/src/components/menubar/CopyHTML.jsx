@@ -1,12 +1,11 @@
 import React, { useState } from "react"
-import {
-  MenubarContent,
-  MenubarMenu,
-  MenubarTrigger,
-} from "../shadcn/menubar"
+import { MenubarContent, MenubarMenu, MenubarTrigger } from "../shadcn/menubar"
 
 import { Toggle } from "../shadcn/toggle"
 import { Button } from "../shadcn/button"
+import { Separator } from "../shadcn/separator"
+
+import { GREEN_TOGGLE_PROPS } from "./commonValues"
 
 export default function CopyHTML() {
   const [isHTML, setIsHTML] = useState(true)
@@ -25,22 +24,16 @@ export default function CopyHTML() {
     className: "w-full",
   }
 
-  const commonPropsCopyHTML = {
-    variant: "green",
-    size: "sm",
-    className: "w-full",
-  }
-
   return (
     <MenubarMenu>
       <MenubarTrigger>Copy HTML</MenubarTrigger>
       <MenubarContent>
         <div className="space-y-1">
-          <div className="flex">
+          <div className="flex space-x-1">
             <Toggle
               pressed={isHTML}
               onPressedChange={customSetHTML}
-              {...commonPropsCopyHTML}
+              {...GREEN_TOGGLE_PROPS}
             >
               HTML
             </Toggle>
@@ -48,19 +41,23 @@ export default function CopyHTML() {
             <Toggle
               pressed={!isHTML}
               onPressedChange={customSetIsJSX}
-              {...commonPropsCopyHTML}
+              {...GREEN_TOGGLE_PROPS}
             >
               JSX
             </Toggle>
           </div>
 
+          <Separator />
+
           <Toggle
             isPressed={isIncludeChildren}
             onPressedChange={setIsIncludeChildren}
-            {...commonPropsCopyHTML}
+            {...GREEN_TOGGLE_PROPS}
           >
             Include Children
           </Toggle>
+
+          <Separator />
 
           <Button {...copyBtnProps}>Copy</Button>
         </div>

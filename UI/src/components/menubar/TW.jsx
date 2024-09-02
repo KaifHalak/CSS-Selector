@@ -9,7 +9,7 @@ import {
 export default function TW() {
   return (
     <MenubarMenu>
-      <MenubarTrigger>Tailwind</MenubarTrigger>
+      <MenubarTrigger className="ml-2">Tailwind</MenubarTrigger>
       <MenubarContent>
         <MenubarItem>Upload config file</MenubarItem>
       </MenubarContent>
