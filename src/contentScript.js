@@ -14,6 +14,7 @@
 // TODO: Copy HTML with styling in the style tag
 // TODO: Clipboard does not work on http
 // TODO: Sometimes styles which were not there before are added to the obj
+// TODO: When copying HTML, add ability to include tw instead of css
 
 import { ElementPicker } from "pick-dom-element"
 import FormatCSS from "./utils/logicalToTraditionalCSS.js"
@@ -51,7 +52,7 @@ async function OnClickElement(element) {
   CopyHTML(element, formatStyling, false)
 
   let jsx = ConvertHTMLToJSX(element, false)
-  
+
   console.log("JSX: ")
   console.log(jsx)
 
