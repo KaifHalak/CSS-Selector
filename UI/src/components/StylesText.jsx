@@ -23,7 +23,7 @@ export default function StylesText() {
   })
 
   let commonPtagStyles =
-    "items-center w-full p-2 rounded-lg text-sm font-medium leading-6  whitespace-pre-wrap bg-stylingText-bg"
+    "items-center w-full p-2 rounded-lg text-sm font-medium leading-6  whitespace-pre-wrap bg-stylingText-bg border-b-2" 
 
   let commonContainerStyles = "space-y-1"
 

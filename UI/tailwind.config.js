@@ -1,6 +1,6 @@
 const { fontFamily } = require("tailwindcss/defaultTheme")
 
-const secondaryColor = "#3E3E47"
+const secondaryColor = ""
 const textColor = "#f8f9f9"
 
 // Menubar
@@ -19,7 +19,7 @@ export default {
       },
       colors: {
         main: {
-          bg: "#1E1E2E",
+          bg: "#2B2B32",
         },
 
         secondary: secondaryColor,
@@ -48,7 +48,7 @@ export default {
         },
 
         menubar: {
-          bg: secondaryColor,
+          bg: "#434343",
 
           menu: {
             text: {
