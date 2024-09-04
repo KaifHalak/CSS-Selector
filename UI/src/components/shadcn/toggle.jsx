@@ -11,11 +11,11 @@ const toggleVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-transparent",
+        default: "bg-transparent text-foreground-text",
         outline:
           "border border-input bg-transparent hover:bg-accent hover:text-accent-foreground",
-        green:
-          "bg-transparent hover:bg-zinc-100 hover:text-zinc-900  data-[state=on]:bg-emerald-600 dark:border-zinc-800 dark:hover:bg-zinc-800 dark:hover:text-zinc-50",
+        selected:
+          "bg-transparent text-toggle-unselected-text-color hover:bg-toggle-unselected-hover hover:text-toggle-unselected-text-color                         data-[state=on]:bg-toggle-selected-bg data-[state=on]:text-toggle-selected-text-color",
       },
       size: {
         default: "h-10 px-3",

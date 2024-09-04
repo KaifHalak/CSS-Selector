@@ -11,7 +11,7 @@ import {
 import { Toggle } from "../shadcn/toggle"
 import { Separator } from "../shadcn/separator"
 
-import { GREEN_TOGGLE_PROPS } from "./commonValues"
+import { TOGGLE_PROPS } from "./commonValues"
 
 function RGBOrHex() {
   const [isHex, setIsHex] = useState(true)
@@ -30,7 +30,7 @@ function RGBOrHex() {
         <Toggle
           pressed={isHex}
           onPressedChange={customSetIsHex}
-          {...GREEN_TOGGLE_PROPS}
+          {...TOGGLE_PROPS}
         >
           Hex
         </Toggle>
@@ -38,7 +38,7 @@ function RGBOrHex() {
         <Toggle
           pressed={!isHex}
           onPressedChange={customSetIsRGB}
-          {...GREEN_TOGGLE_PROPS}
+          {...TOGGLE_PROPS}
         >
           RGB
         </Toggle>
@@ -54,7 +54,7 @@ function DisplayGridLines() {
     <Toggle
       pressed={displayGridLines}
       onPressedChange={setdisplayGridLines}
-      {...GREEN_TOGGLE_PROPS}
+      {...TOGGLE_PROPS}
     >
       Grid lines
     </Toggle>
@@ -78,7 +78,7 @@ function PxOrRM() {
         <Toggle
           pressed={isREM}
           onPressedChange={customSetIsREM}
-          {...GREEN_TOGGLE_PROPS}
+          {...TOGGLE_PROPS}
         >
           rem
         </Toggle>
@@ -86,7 +86,7 @@ function PxOrRM() {
         <Toggle
           pressed={!isREM}
           onPressedChange={customSetIsPx}
-          {...GREEN_TOGGLE_PROPS}
+          {...TOGGLE_PROPS}
         >
           px
         </Toggle>
@@ -102,9 +102,9 @@ export default function Other() {
       <MenubarContent>
         <div className="space-y-1">
           <RGBOrHex />
-          <Separator/>
+          <Separator />
           <PxOrRM />
-          <Separator/>
+          <Separator />
           <DisplayGridLines />
         </div>
       </MenubarContent>

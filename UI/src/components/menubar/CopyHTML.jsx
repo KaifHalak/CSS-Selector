@@ -5,7 +5,7 @@ import { Toggle } from "../shadcn/toggle"
 import { Button } from "../shadcn/button"
 import { Separator } from "../shadcn/separator"
 
-import { GREEN_TOGGLE_PROPS } from "./commonValues"
+import { TOGGLE_PROPS } from "./commonValues"
 
 export default function CopyHTML() {
   const [isHTML, setIsHTML] = useState(true)
@@ -22,6 +22,7 @@ export default function CopyHTML() {
   const copyBtnProps = {
     size: "sm",
     className: "w-full",
+    variant: "custom",
   }
 
   return (
@@ -33,7 +34,7 @@ export default function CopyHTML() {
             <Toggle
               pressed={isHTML}
               onPressedChange={customSetHTML}
-              {...GREEN_TOGGLE_PROPS}
+              {...TOGGLE_PROPS}
             >
               HTML
             </Toggle>
@@ -41,7 +42,7 @@ export default function CopyHTML() {
             <Toggle
               pressed={!isHTML}
               onPressedChange={customSetIsJSX}
-              {...GREEN_TOGGLE_PROPS}
+              {...TOGGLE_PROPS}
             >
               JSX
             </Toggle>
@@ -52,7 +53,7 @@ export default function CopyHTML() {
           <Toggle
             isPressed={isIncludeChildren}
             onPressedChange={setIsIncludeChildren}
-            {...GREEN_TOGGLE_PROPS}
+            {...TOGGLE_PROPS}
           >
             Include Children
           </Toggle>

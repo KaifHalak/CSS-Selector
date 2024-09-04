@@ -22,23 +22,28 @@ export default function StylesText() {
     css += `${key}: ${value}; \n`
   })
 
-  let commonStyles =
-    "items-center w-full p-2 border-zinc-800 rounded-sm border-[1px] text-sm font-medium leading-6  whitespace-pre-wrap"
+  let commonPtagStyles =
+    "items-center w-full p-2 rounded-lg text-sm font-medium leading-6  whitespace-pre-wrap bg-stylingText-bg"
+
+  let commonContainerStyles = "space-y-1"
 
   let titleStyles = "text-base font-semibold"
 
   return (
     <>
-      <div className="w-full p-3 text-white ">
+      <div className="w-full pt-3 space-y-3 text-white ">
         
-        <span className={titleStyles}>Tailwind</span>
-        <p className={commonStyles + " max-h-[120px]"}>{TW}</p>
-
-        <span className={titleStyles}>CSS</span>
-        <div className={commonStyles + " max-h-[340px]"}>
-          <p>{css}</p>
+        <div className={commonContainerStyles}>
+          <span className={titleStyles}>Tailwind</span>
+          <p className={commonPtagStyles + " max-h-[120px]"}>{TW}</p>
         </div>
-        
+
+        <div className={commonContainerStyles}>
+          <span className={titleStyles}>CSS</span>
+          <div className={commonPtagStyles + " max-h-[340px]"}>
+            <p>{css}</p>
+          </div>
+        </div>
       </div>
     </>
   )

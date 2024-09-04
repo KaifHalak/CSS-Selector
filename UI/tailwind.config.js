@@ -1,5 +1,11 @@
 const { fontFamily } = require("tailwindcss/defaultTheme")
 
+const secondaryColor = "#3E3E47"
+const textColor = "#f8f9f9"
+
+// Menubar
+const hoverColor = "#50505D"
+
 /** @type {import('tailwindcss').Config} */
 export default {
   darkMode: ["class"],
@@ -12,47 +18,92 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       colors: {
-        border: "hsl(var(--border)   / <alpha-value>)",
-        input: "hsl(var(--input)  / <alpha-value>)",
-        ring: "hsl(var(--ring)  / <alpha-value>)",
-        background: "hsl(var(--background)  / <alpha-value>)",
-        foreground: {
-          DEFAULT: "hsl(var(--foreground)  / <alpha-value>)",
-          text: "hsl(var(--foreground-text  / <alpha-value>)"
+        main: {
+          bg: "#1E1E2E",
         },
-        primary: {
-          DEFAULT: "hsl(var(--primary)  / <alpha-value>)",
-          foreground: "hsl(var(--primary-foreground)  / <alpha-value>)",
+
+        secondary: secondaryColor,
+
+        button: {
+          bg: "#B0411E",
+          hover: "rgb(176, 65, 30, 75%)",
+          text: {
+            color: textColor,
+          },
         },
-        secondary: {
-          DEFAULT: "hsl(var(--secondary)  / <alpha-value>)",
-          foreground: "hsl(var(--secondary-foreground)  / <alpha-value>)",
+
+        toggle: {
+          selected: {
+            text: {
+              color: "#000",
+            },
+            bg: "#f8f9f9",
+          },
+          unselected: {
+            hover: hoverColor,
+            text: {
+              color: textColor,
+            },
+          },
         },
-        destructive: {
-          DEFAULT: "hsl(var(--destructive)  / <alpha-value>)",
-          foreground: "hsl(var(--destructive-foreground)  / <alpha-value>)",
+
+        menubar: {
+          bg: secondaryColor,
+
+          menu: {
+            text: {
+              color: textColor,
+            },
+            hover: hoverColor,
+          },
         },
-        muted: {
-          DEFAULT: "hsl(var(--muted)  / <alpha-value>)",
-          foreground: "hsl(var(--muted-foreground)  / <alpha-value>)",
+
+        stylingText: {
+          bg: secondaryColor,
         },
-        accent: {
-          DEFAULT: "hsl(var(--accent)  / <alpha-value>)",
-          foreground: "hsl(var(--accent-foreground)  / <alpha-value>)",
-          text: "hsl(var(--accent-text)  / <alpha-value>)"
-        },
-        popover: {
-          DEFAULT: "hsl(var(--popover)  / <alpha-value>)",
-          foreground: "hsl(var(--popover-foreground)  / <alpha-value>)",
-        },
-        card: {
-          DEFAULT: "hsl(var(--card)  / <alpha-value>)",
-          foreground: "hsl(var(--card-foreground)  / <alpha-value>)",
-        },
-        font: {
-          DEFAULT: "",
-          color: ""
-        }
+
+        // =======================
+
+        // background: "hsl(var(--background))",
+        // foreground: {
+        //   DEFAULT: "hsl(var(--foreground))",
+        //   text: "hsl(var(--foreground-text))",
+        //   hover: "hsl(var(--foreground-hover))",
+        // },
+        // selected: "hsl(var(--selected))",
+        // accent: {
+        //   DEFAULT: "hsl(var(--accent))",
+        //   foreground: "hsl(var(--accent-foreground))",
+        //   text: "hsl(var(--accent-text))",
+        // },
+        // border: "hsl(var(--border))",
+        // input: "hsl(var(--input))",
+        // ring: "hsl(var(--ring))",
+        // primary: {
+        //   DEFAULT: "hsl(var(--primary))",
+        //   foreground: "hsl(var(--primary-foreground))",
+        // },
+        // secondary: {
+        //   DEFAULT: "hsl(var(--secondary))",
+        //   foreground: "hsl(var(--secondary-foreground))",
+        // },
+        // destructive: {
+        //   DEFAULT: "hsl(var(--destructive))",
+        //   foreground: "hsl(var(--destructive-foreground))",
+        // },
+        // muted: {
+        //   DEFAULT: "hsl(var(--muted))",
+        //   foreground: "hsl(var(--muted-foreground))",
+        // },
+
+        // popover: {
+        //   DEFAULT: "hsl(var(--popover))",
+        //   foreground: "hsl(var(--popover-foreground))",
+        // },
+        // card: {
+        //   DEFAULT: "hsl(var(--card))",
+        //   foreground: "hsl(var(--card-foreground))",
+        // },
       },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
