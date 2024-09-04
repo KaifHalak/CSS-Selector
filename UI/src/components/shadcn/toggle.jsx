@@ -7,7 +7,7 @@ import { cva } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const toggleVariants = cva(
-  "inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors hover:bg-muted hover:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-accent data-[state=on]:text-accent-foreground",
+  "inline-flex items-center justify-center rounded-md text-sm font-normal ring-offset-background transition-colors hover:bg-muted hover:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-accent data-[state=on]:text-accent-foreground",
   {
     variants: {
       variant: {
@@ -15,7 +15,7 @@ const toggleVariants = cva(
         outline:
           "border border-input bg-transparent hover:bg-accent hover:text-accent-foreground",
         selected:
-          "bg-transparent text-toggle-unselected-text-color hover:bg-toggle-unselected-hover hover:text-toggle-unselected-text-color                         data-[state=on]:bg-toggle-selected-bg data-[state=on]:text-toggle-selected-text-color",
+          "bg-transparent text-toggle-unselected-text-color hover:bg-toggle-unselected-hover hover:text-toggle-unselected-text-color   font-poppins data-[state=on]:bg-toggle-selected-bg data-[state=on]:text-toggle-selected-text-color ",
       },
       size: {
         default: "h-10 px-3",

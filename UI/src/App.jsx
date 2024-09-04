@@ -10,15 +10,14 @@ import StylesText from "./components/StylesText"
 export default function App() {
   return (
     <div
-      className="w-[375px] p-3 rounded-lg bg-main-bg m-auto my-10 "
+      className="w-[385px] pt-3 px-5 pb-5 rounded-lg bg-main-bg m-auto my-10 font-poppins font-normal"
       style={{
-        background: "-webkit-linear-gradient(to right, #434343, #000000)",
+        background:
+          "radial-gradient(circle at 50% 125%, #171212, #302730, #3e3e47)",
       }}
     >
-      <div className="p-1 px-2 rounded ">
-        <MenuBar />
-        <StylesText />
-      </div>
+      <MenuBar />
+      <StylesText />
     </div>
   )
 }

@@ -3,7 +3,6 @@ import { MenubarContent, MenubarMenu, MenubarTrigger } from "../shadcn/menubar"
 
 import { Toggle } from "../shadcn/toggle"
 import { Button } from "../shadcn/button"
-import { Separator } from "../shadcn/separator"
 
 import { TOGGLE_PROPS } from "./commonValues"
 
@@ -48,8 +47,6 @@ export default function CopyHTML() {
             </Toggle>
           </div>
 
-          <Separator />
-
           <Toggle
             isPressed={isIncludeChildren}
             onPressedChange={setIsIncludeChildren}
@@ -57,8 +54,6 @@ export default function CopyHTML() {
           >
             Include Children
           </Toggle>
-
-          <Separator />
 
           <Button {...copyBtnProps}>Copy</Button>
         </div>

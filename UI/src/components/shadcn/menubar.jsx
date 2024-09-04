@@ -18,7 +18,7 @@ const Menubar = React.forwardRef(({ className, ...props }, ref) => (
   <MenubarPrimitive.Root
     ref={ref}
     className={cn(
-      "flex h-10 items-center space-x-1 rounded-md bg-background p-1",
+      "flex h-10 items-center space-x-1 bg-background p-1",
       className
     )}
     {...props}
@@ -30,7 +30,7 @@ const MenubarTrigger = React.forwardRef(({ className, ...props }, ref) => (
   <MenubarPrimitive.Trigger
     ref={ref}
     className={cn(
-      "flex cursor-default select-none items-center rounded-sm px-3 py-1.5 text-sm font-medium outline-none text-menubar-menu-text-color  data-[state=open]:bg-menubar-menu-hover",
+      "flex cursor-default select-none items-center rounded-sm px-3 py-1.5 text-sm font-medium outline-none text-menubar-menu-text-color hover:cursor-pointer  data-[state=open]:bg-menubar-menu-hover",
       className
     )}
     {...props}
@@ -94,7 +94,7 @@ const MenubarItem = React.forwardRef(({ className, inset, ...props }, ref) => (
   <MenubarPrimitive.Item
     ref={ref}
     className={cn(
-      "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none text-menubar-menu-text-color focus:bg-menubar-menu-hover ",
+      "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-xs font-medium outline-none font-poppins text-menubar-menu-text-color focus:bg-menubar-menu-hover hover:cursor-pointer",
       inset && "pl-8",
       className
     )}
