@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client"
 import App from "./App.jsx"
 import "./index.css"
 
-createRoot(document.getElementById("root")).render(
+createRoot(document.getElementById("css-selector-root-9524")).render(
   <StrictMode>
     <App />
   </StrictMode>

@@ -15,5 +15,14 @@
   "action": {
     "default_title": "Css Selector"
   },
-  "permissions": ["storage", "activeTab", "scripting", "debugger"]
-}
+  "web_accessible_resources": [
+    {
+      "resources": ["assets/*"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "permissions": ["storage", "activeTab", "scripting", "debugger"],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self';"
+  }
+} 

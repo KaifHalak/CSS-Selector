@@ -10,7 +10,11 @@
     "pack": "node pack.js",
     "repack": "npm run build && npm run pack",
     "format": "prettier --write --ignore-unknown \"{config,public,src}/**/*.{html,css,js,ts,json}\"",
-    "server": "nodemon ./server.mjs"
+    "server": "nodemon ./server.mjs",
+    "build-ui": "npm --prefix UI run build",
+    "post-build": "node UpdateSRCValueForReact.js",
+    "move-file": "node MoveFile.js",
+    "final-ui-build": "npm run build-ui && npm run post-build && npm run move-file"
   },
   "devDependencies": {
     "adm-zip": "^0.5.15",

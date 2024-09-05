@@ -9,7 +9,7 @@ import Other from "./Other"
 export default function MenuBar() {
   return (
     <>
-      <Menubar className="border-b-2 bg-secondary">
+      <Menubar className="border-b-2">
         <TW />
         <CopyHTML />
         <Other />

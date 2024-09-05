@@ -34,7 +34,7 @@ export default function StylesText() {
 
   return (
     <>
-      <div className="w-full pt-3 space-y-1 text-white ">
+      <div className="w-full pt-3 space-y-1 text-white">
         <div className={commonContainerStyles}>
           <div className="flex justify-between">
             <span className={titleStyles}>Tailwind</span>

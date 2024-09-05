@@ -23,9 +23,22 @@ import ConvertHTMLToJSX from "./utils/HTMLToJSX.js"
 
 console.log("CONTENT SCRIPT RUNNING")
 
+let UIdoc = document.createElement("div")
+UIdoc.id = "css-selector-root-9524"
+UIdoc.style.position = "absolute"
+UIdoc.style.top = "10px"
+UIdoc.style.maxWidth = "385px"
+UIdoc.style.display = "none"
+document.body.appendChild(UIdoc)
+
+const link = document.createElement("link")
+link.rel = "stylesheet"
+link.href = chrome.runtime.getURL("assets/styles.css")
+document.head.appendChild(link)
+
 MessagesFromBackground()
 
-const pickerStyle = { borderColor: "#0000ff" }
+const pickerStyle = { borderColor: "#0000ff", zIndex: "9999" }
 
 // True - Active, False - Inactive
 let pickerStatus = true
@@ -44,7 +57,8 @@ function OnHoverElement(element) {
 }
 
 async function OnClickElement(element) {
-  TogglePicker()
+  UIdoc.style.display = "block"
+  // TogglePicker()
   console.log(element)
   const styling = GetAppliedComputedStyles(element)
   const formatStyling = FormatCSS(styling)
@@ -85,6 +99,10 @@ function StartPicker() {
 
 function TogglePicker() {
   pickerStatus ? StopPicker() : StartPicker()
+  pickerStatus
+    ? (UIdoc.style.display = "none")
+    : (UIdoc.style.display = "block")
+
   pickerStatus = !pickerStatus
   console.log("Picker Toggled")
 }

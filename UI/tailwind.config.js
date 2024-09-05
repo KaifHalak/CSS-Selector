@@ -9,6 +9,7 @@ const hoverColor = "#50505D"
 export default {
   darkMode: ["class"],
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  important: true,
   theme: {
     extend: {
       borderRadius: {
@@ -106,7 +107,7 @@ export default {
         // },
       },
       fontFamily: {
-        sans: ["var(--font-sans)", ...fontFamily.sans],
+        // sans: ["var(--font-sans)", ...fontFamily.sans],
         poppins: ["poppins"],
       },
       keyframes: {
