@@ -3,10 +3,11 @@ import { promises as fs, existsSync, rmSync } from "fs"
 import path from "path"
 import { fileURLToPath } from "url"
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-const distDir = path.join(__dirname, "UI/dist")
-const targetDir = path.join(__dirname, "build") // Change 'target' to your desired directory
+const distDir =
+  "D:/My Stuff/NodeJS/Currently Doing/CSS Selector/css-selector/UI/dist"
+const targetDir =
+  "D:/My Stuff/NodeJS/Currently Doing/CSS Selector/css-selector/build"
 
 async function moveDist() {
   try {

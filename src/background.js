@@ -11,7 +11,7 @@ chrome.action.onClicked.addListener(async (tab) => {
 
   chrome.scripting.executeScript({
     target: { tabId: tab.id },
-    files: ["contentScript.js", "assets/script.js"],
+    files: ["assets/script.js"],
   })
 })
 

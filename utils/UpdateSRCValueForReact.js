@@ -2,12 +2,10 @@ import { promises as fs } from "fs"
 import path from "path"
 import { fileURLToPath } from "url"
 
-// Get the current file path (useful for running in ES modules)
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
 
 // Directory where your .js files are located (adjust 'src' if necessary)
-const directoryPath = path.join(__dirname, "UI/dist/assets/")
+const directoryPath =
+  "D:/My Stuff/NodeJS/Currently Doing/CSS Selector/css-selector/UI/dist/assets/script.js"
 
 // Function to process each .js file
 async function processFile(filePath) {
@@ -16,13 +14,13 @@ async function processFile(filePath) {
     let data = await fs.readFile(filePath, "utf8")
 
     // Regex to find src attributes and replace with chrome.runtime.getURL()
+
     const srcRegex = /src\s*[:=]\s*["']([^"']+)["']/g
 
     // Replace src value with chrome.runtime.getURL
     const updatedData = data.replace(srcRegex, (match, filePath) => {
       return `src:chrome.runtime.getURL('${filePath}')`
     })
-
     // Write the updated content back to the file
     await fs.writeFile(filePath, updatedData, "utf8")
     console.log(`Updated file: ${filePath}`)
@@ -44,10 +42,12 @@ async function processDirectory(directoryPath) {
         await processFile(filePath)
       }
     }
+
+    console.log("Update src value complete")
   } catch (error) {
     console.error(`Error reading directory: ${directoryPath}`, error)
   }
 }
 
 // Start processing the directory
-processDirectory(directoryPath)
+processFile(directoryPath)

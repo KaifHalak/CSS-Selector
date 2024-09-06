@@ -21,30 +21,31 @@ import FormatCSS from "./utils/logicalToTraditionalCSS.js"
 import ConvertCSSToTw from "./utils/CSSToTW.js"
 import ConvertHTMLToJSX from "./utils/HTMLToJSX.js"
 
-console.log("CONTENT SCRIPT RUNNING")
-
-let UIdoc = document.createElement("div")
-UIdoc.id = "css-selector-root-9524"
-UIdoc.style.position = "absolute"
-UIdoc.style.top = "10px"
-UIdoc.style.maxWidth = "385px"
-UIdoc.style.display = "none"
-document.body.appendChild(UIdoc)
+let UIdoc
 
 const link = document.createElement("link")
 link.rel = "stylesheet"
 link.href = chrome.runtime.getURL("assets/styles.css")
 document.head.appendChild(link)
 
-MessagesFromBackground()
-
 const pickerStyle = { borderColor: "#0000ff", zIndex: "9999" }
-
 // True - Active, False - Inactive
 let pickerStatus = true
-
 const picker = new ElementPicker({ style: pickerStyle })
-StartPicker()
+
+let elementData = {}
+let globalUIFunctions = {}
+// setStyleValues
+
+export function main(UIFunctions) {
+  console.log("CONTENT SCRIPT RUNNING")
+  globalUIFunctions = UIFunctions
+
+  UIdoc = globalUIFunctions.getUIDoc()
+
+  StartPicker()
+  MessagesFromBackground()
+}
 
 function HandleEscKeyPress(event) {
   if (event.key === "Escape" || event.keyCode === 27) {
@@ -57,29 +58,33 @@ function OnHoverElement(element) {
 }
 
 async function OnClickElement(element) {
-  UIdoc.style.display = "block"
-  // TogglePicker()
   console.log(element)
-  const styling = GetAppliedComputedStyles(element)
-  const formatStyling = FormatCSS(styling)
 
-  CopyHTML(element, formatStyling, false)
+  const cssStyles = GetAppliedComputedStyles(element)
+  const formatCSSStyles = FormatCSS(cssStyles)
 
-  let jsx = ConvertHTMLToJSX(element, false)
+  // CopyHTML(element, formatStyling, false)
+  // let jsx = ConvertHTMLToJSX(element, false)
 
-  console.log("JSX: ")
-  console.log(jsx)
+  let tailwindStyles = await ConvertCSSToTw(formatCSSStyles)
 
-  // let css = ""
-  // Object.entries(formatStyling).forEach(([key, value]) => {
-  //   css = css + `${key}: ${value}; \n`
-  // })
+  elementData.css = formatCSSStyles
+  elementData.tw = tailwindStyles
 
-  console.log(formatStyling)
+  console.log("ONE")
 
-  let tailwindStyles = await ConvertCSSToTw(formatStyling)
-  console.log("Tailwind: \n")
-  console.log(tailwindStyles)
+  globalUIFunctions.setStyleValues({
+    cssObject: formatCSSStyles,
+    tw: tailwindStyles,
+  })
+
+  console.log("TWO")
+
+  UIdoc.style.display = "block"
+}
+
+export function GetElementStyles() {
+  return elementData
 }
 
 function StopPicker() {

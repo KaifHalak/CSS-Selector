@@ -1,28 +1,15 @@
 import React, { useState } from "react"
 
-export default function StylesText() {
+// import { GetElementStyles } from "../../../src/contentScript"
+
+export default function StylesText({ cssObject = {}, tw }) {
   const [isCSSHover, setIsCSSHover] = useState(false)
   const [isTWHover, setIsTWHover] = useState(false)
 
-  const TW =
-    "items-center h-14 box-border flex max-w-screen-2xl border-zinc-800 px-4 border-solid border-0"
-  const CSSObject = {
-    "align-items": "center",
-    height: "56px",
-    "box-sizing": "border-box",
-    display: "flex",
-    "max-width": "1536px",
-    "border-color": "rgb(39, 39, 42)",
-    "border-style": "solid",
-    "border-width": "0px",
-    "padding-right": "16px",
-    "padding-left": "16px",
-  }
+  let formattedCSS = ""
 
-  let css = ""
-
-  Object.entries(CSSObject).forEach((key, value) => {
-    css += `${key}: ${value}; \n`
+  Object.entries(cssObject).forEach(([key, value]) => {
+    formattedCSS += `${key}: ${value}; \n`
   })
 
   let commonPtagStyles =
@@ -59,7 +46,7 @@ export default function StylesText() {
               (isTWHover ? "bg-menubar-menu-hover" : "")
             }
           >
-            {TW}
+            {tw}
           </div>
         </div>
 
@@ -89,7 +76,7 @@ export default function StylesText() {
               (isCSSHover ? "bg-menubar-menu-hover" : "")
             }
           >
-            {css}
+            {formattedCSS}
           </div>
         </div>
       </div>
