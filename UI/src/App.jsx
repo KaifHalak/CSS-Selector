@@ -11,13 +11,12 @@ import { main } from "../../src/contentScript"
 
 // bg-[#434343]/30
 
-export const CopyHTMLContext = createContext()
+export const ElementStylesContext = createContext()
 
 export default function App({ UIdoc }) {
   const [styleValues, setStyleValues] = useState({})
 
   // Copy HTML
-  
 
   useEffect(() => {
     let UIFunctions = {
@@ -48,9 +47,9 @@ export default function App({ UIdoc }) {
           />
         </div>
 
-        <CopyHTMLContext.Provider value={""}>
+        <ElementStylesContext.Provider value={[styleValues, setStyleValues]}>
           <MenuBar />
-        </CopyHTMLContext.Provider>
+        </ElementStylesContext.Provider>
 
         <StylesText {...styleValues} />
       </div>

@@ -18,11 +18,14 @@
 // TODO: If you move the popup very fast, the cursor goes off
 // TODO: The styles changes for the page when you inject the popup
 // TODO: The selector causes a bobbing effect (not smooth)
+// TODO: You should still be able to use inspect element when the picker is active
+// TODO: Convert Px to rm and vice versa when copying html
 
 import { ElementPicker } from "pick-dom-element"
 import FormatCSS from "./utils/logicalToTraditionalCSS.js"
 import ConvertCSSToTw from "./utils/CSSToTW.js"
 import ConvertHTMLToJSX from "./utils/HTMLToJSX.js"
+import CopyToClipboard from "./utils/CopyToClipboard.js"
 
 let UIdoc
 
@@ -257,17 +260,6 @@ function RecursivelyApplyStylesToAllChildElements(
   }
 
   return [originalElement, elementCopy]
-}
-
-function CopyToClipboard(text) {
-  navigator.clipboard.writeText(text).then(
-    () => {
-      console.log("Text copied to clipboard successfully!")
-    },
-    (err) => {
-      console.error("Failed to copy text: ", err)
-    }
-  )
 }
 
 export function GoUpSelector() {

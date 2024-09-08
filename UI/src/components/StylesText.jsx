@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 
-// import { GetElementStyles } from "../../../src/contentScript"
+import CopyToClipboard from "../../../src/utils/CopyToClipboard"
 
 export default function StylesText({ cssObject = {}, tw }) {
   const [isCSSHover, setIsCSSHover] = useState(false)
@@ -34,6 +34,7 @@ export default function StylesText({ cssObject = {}, tw }) {
               onMouseLeave={() => {
                 setIsTWHover(false)
               }}
+              onClick={() => CopyToClipboard(tw)}
             >
               <img src="/assets/stylesText/copy-icon.svg" alt="copy tailwind" />
             </button>
@@ -64,6 +65,7 @@ export default function StylesText({ cssObject = {}, tw }) {
               onMouseLeave={() => {
                 setIsCSSHover(false)
               }}
+              onClick={() => CopyToClipboard(formattedCSS)}
             >
               <img src="/assets/stylesText/copy-icon.svg" alt="copy css" />
             </button>

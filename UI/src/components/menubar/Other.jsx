@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useContext, useEffect } from "react"
 import {
   Menubar,
   MenubarContent,
@@ -12,15 +12,43 @@ import { Toggle } from "../shadcn/toggle"
 import { Separator } from "../shadcn/separator"
 
 import { TOGGLE_PROPS } from "./commonValues"
+import { ElementStylesContext } from "@/src/App"
+import {
+  ConvertPxToRem,
+  ConvertRemToPx,
+} from "../../../../src/utils/PxRMConversion"
+
+import { RGBHexConverter } from "../../../../src/utils/RGBHexConverter"
+
+// TODO: Store the toggle settings
 
 function RGBOrHex() {
+  const elementStyle = useContext(ElementStylesContext)
+
+  const styleValues = elementStyle[0]
+  const setStyleValues = elementStyle[1]
+
+  // let { cssObject, tw } = styleValues
+
   const [isHex, setIsHex] = useState(true)
 
   const customSetIsRGB = () => {
+    if (!styleValues) {
+      return
+    }
+
+    let { cssObject, tw } = RGBHexConverter(styleValues, false)
+    setStyleValues({ cssObject, tw })
     setIsHex(false)
   }
 
   const customSetIsHex = () => {
+    if (!styleValues) {
+      return
+    }
+
+    let { cssObject, tw } = RGBHexConverter(styleValues, true)
+    setStyleValues({ cssObject, tw })
     setIsHex(true)
   }
 
@@ -62,13 +90,35 @@ function DisplayGridLines() {
 }
 
 function PxOrRM() {
-  const [isREM, setIsREM] = useState(true)
+  const elementStyle = useContext(ElementStylesContext)
+
+  const styleValues = elementStyle[0]
+  const setStyleValues = elementStyle[1]
+
+  let { cssObject, tw } = styleValues
+
+  const [isREM, setIsREM] = useState(false)
 
   const customSetIsPx = () => {
+    if (!styleValues) {
+      return
+    }
+
+    cssObject = ConvertRemToPx(cssObject)
+    tw = ConvertRemToPx(tw)
+    setStyleValues({ cssObject, tw }) // Update context with new values
     setIsREM(false)
   }
 
   const customSetIsREM = () => {
+    if (!styleValues) {
+      return
+    }
+
+    cssObject = ConvertPxToRem(cssObject)
+    tw = ConvertPxToRem(tw) // Notice this was wrong before (rem -> rem); updated it
+    setStyleValues({ cssObject, tw })
+
     setIsREM(true)
   }
 
