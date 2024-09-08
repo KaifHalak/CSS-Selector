@@ -5,7 +5,21 @@ import react from "@vitejs/plugin-react"
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   return {
-    plugins: [react()],
+    plugins: [
+      react({
+        // This is the key part where the warnings are ignored
+        babel: {
+          plugins: [
+            [
+              "babel-plugin-react-remove-properties",
+              {
+                properties: ["^data-test$"], // Example of ignoring specific warnings (you can customize this)
+              },
+            ],
+          ],
+        },
+      }),
+    ],
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "./"),

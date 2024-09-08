@@ -15,6 +15,7 @@
 // TODO: Clipboard does not work on http
 // TODO: Sometimes styles which were not there before are added to the obj
 // TODO: When copying HTML, add ability to include tw instead of css
+// TODO: If you move the popup very fast, the cursor goes off
 
 import { ElementPicker } from "pick-dom-element"
 import FormatCSS from "./utils/logicalToTraditionalCSS.js"
@@ -59,6 +60,7 @@ function OnHoverElement(element) {
 
 async function OnClickElement(element) {
   console.log(element)
+  elementData.currentElement = element
 
   const cssStyles = GetAppliedComputedStyles(element)
   const formatCSSStyles = FormatCSS(cssStyles)
@@ -98,6 +100,15 @@ function StartPicker() {
   picker.start({
     onHover: OnHoverElement,
     onClick: OnClickElement,
+    elementFilter: (element) => {
+      if (
+        element.closest("#css-selector-root-9524") ||
+        element.closest(".menu-open")
+      ) {
+        return false
+      }
+      return true
+    },
   })
   console.log("Picker Started")
 }
@@ -174,7 +185,11 @@ function InlineTextToObject(element) {
   return allInlineStyles
 }
 
-function CopyHTML(originalElement, styling, copyChildElements = false) {
+function CopyHTML(copyChildElements = false) {
+  // Copy HTML
+
+  let styling = elementData.css
+  let originalElement = elementData.currentElement
   let elementCopy = originalElement.cloneNode(copyChildElements)
 
   let allStylings = Object.entries(styling)
@@ -190,7 +205,14 @@ function CopyHTML(originalElement, styling, copyChildElements = false) {
     )[1]
   }
 
-  CopyToClipboard(elementCopy.outerHTML)
+  return elementCopy
+}
+
+export function CopyElement(isHTML, copyChildElements = false){
+
+  let html = CopyHTML(copyChildElements)
+
+  CopyToClipboard( isHTML.outerHTML ? html : ConvertHTMLToJSX(html)  )
 }
 
 function RecursivelyApplyStylesToAllChildElements(

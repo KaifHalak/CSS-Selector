@@ -26,9 +26,8 @@ function ConvertInlineStyleToJSX(style) {
     }, {})
 }
 
-export default function ConvertHTMLToJSX(html, includeChildElements) {
+export default function ConvertHTMLToJSX(html) {
   let jsx = html.outerHTML
-
   // Replace the basic attributes using mapObj
   for (const [key, value] of Object.entries(mapObj)) {
     jsx = jsx.replace(new RegExp(key, "g"), value)
@@ -42,7 +41,10 @@ export default function ConvertHTMLToJSX(html, includeChildElements) {
   })
 
   // Add self-closing tags where needed
-  jsx = jsx.replace(/<(img|input|br|hr|meta|link|base|area|col|param|source|embed|track)([^>]*)>/g, "<$1$2 />");
+  jsx = jsx.replace(
+    /<(img|input|br|hr|meta|link|base|area|col|param|source|embed|track)([^>]*)>/g,
+    "<$1$2 />"
+  )
 
   return jsx
 }

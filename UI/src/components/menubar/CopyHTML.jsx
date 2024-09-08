@@ -1,10 +1,11 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
 import { MenubarContent, MenubarMenu, MenubarTrigger } from "../shadcn/menubar"
 
 import { Toggle } from "../shadcn/toggle"
 import { Button } from "../shadcn/button"
 
 import { TOGGLE_PROPS } from "./commonValues"
+import { CopyElement } from "../../../../src/contentScript"
 
 export default function CopyHTML() {
   const [isHTML, setIsHTML] = useState(true)
@@ -18,10 +19,15 @@ export default function CopyHTML() {
     setIsHTML(true)
   }
 
+  const onClickCopy = () => {
+    CopyElement(isHTML, isIncludeChildren)
+  }
+
   const copyBtnProps = {
     size: "sm",
     className: "w-full",
     variant: "custom",
+    onClick: onClickCopy,
   }
 
   return (
@@ -48,7 +54,7 @@ export default function CopyHTML() {
           </div>
 
           <Toggle
-            isPressed={isIncludeChildren}
+            pressed={isIncludeChildren}
             onPressedChange={setIsIncludeChildren}
             {...TOGGLE_PROPS}
           >
