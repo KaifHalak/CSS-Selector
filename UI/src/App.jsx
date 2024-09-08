@@ -19,17 +19,6 @@ export default function App({ UIdoc }) {
   // Copy HTML
   
 
-  const onClickCopy = () => {
-
-    const payload = {
-      isHTML,
-      isIncludeChildren
-    }
-
-
-
-  }
-
   useEffect(() => {
     let UIFunctions = {
       setStyleValues,

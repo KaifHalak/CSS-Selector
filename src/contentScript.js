@@ -16,6 +16,8 @@
 // TODO: Sometimes styles which were not there before are added to the obj
 // TODO: When copying HTML, add ability to include tw instead of css
 // TODO: If you move the popup very fast, the cursor goes off
+// TODO: The styles changes for the page when you inject the popup
+// TODO: The selector causes a bobbing effect (not smooth)
 
 import { ElementPicker } from "pick-dom-element"
 import FormatCSS from "./utils/logicalToTraditionalCSS.js"
@@ -30,9 +32,13 @@ link.href = chrome.runtime.getURL("assets/styles.css")
 document.head.appendChild(link)
 
 const pickerStyle = { borderColor: "#0000ff", zIndex: "9999" }
+const selectedElementOverlayStyle = { borderColor: "#741cd9", zIndex: "9999" }
 // True - Active, False - Inactive
 let pickerStatus = true
-const picker = new ElementPicker({ style: pickerStyle })
+const picker = new ElementPicker(
+  (overlayOptions = { style: pickerStyle }),
+  (selectedOverlayOptions = { style: selectedElementOverlayStyle })
+)
 
 let elementData = {}
 let globalUIFunctions = {}
@@ -54,12 +60,19 @@ function HandleEscKeyPress(event) {
   }
 }
 
-function OnHoverElement(element) {
-  // console.log(`Hover: ${element}`);
-}
+function OnHoverElement(element) {}
 
 async function OnClickElement(element) {
+  // if (count !== 1) {
+  //   count++
+  //   StartPicker(element.parentElement)
+  // }
+
+  // element.style.backgroundColor = "gray"
+  // element.style.border = "1px"
+  // element.style.borderColor = "black"
   console.log(element)
+
   elementData.currentElement = element
 
   const cssStyles = GetAppliedComputedStyles(element)
@@ -73,14 +86,10 @@ async function OnClickElement(element) {
   elementData.css = formatCSSStyles
   elementData.tw = tailwindStyles
 
-  console.log("ONE")
-
   globalUIFunctions.setStyleValues({
     cssObject: formatCSSStyles,
     tw: tailwindStyles,
   })
-
-  console.log("TWO")
 
   UIdoc.style.display = "block"
 }
@@ -97,6 +106,7 @@ function StopPicker() {
 
 function StartPicker() {
   document.addEventListener("keydown", HandleEscKeyPress)
+
   picker.start({
     onHover: OnHoverElement,
     onClick: OnClickElement,
@@ -208,11 +218,10 @@ function CopyHTML(copyChildElements = false) {
   return elementCopy
 }
 
-export function CopyElement(isHTML, copyChildElements = false){
-
+export function CopyElement(isHTML, copyChildElements = false) {
   let html = CopyHTML(copyChildElements)
 
-  CopyToClipboard( isHTML.outerHTML ? html : ConvertHTMLToJSX(html)  )
+  CopyToClipboard(isHTML.outerHTML ? html : ConvertHTMLToJSX(html))
 }
 
 function RecursivelyApplyStylesToAllChildElements(
@@ -259,4 +268,12 @@ function CopyToClipboard(text) {
       console.error("Failed to copy text: ", err)
     }
   )
+}
+
+export function GoUpSelector() {
+  picker.goUpSelector(elementData.currentElement)
+}
+
+export function GoDownSelector() {
+  picker.goDownSelector(elementData.currentElement)
 }

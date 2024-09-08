@@ -44,8 +44,6 @@ const toggleVariants = cva(
 
 const Toggle = React.forwardRef(
   ({ className, size, variant, pressed, onPressedChange, ...props }, ref) => {
-    console.log(props.children)
-    console.log(pressed)
 
     const handleClick = () => {
       onPressedChange(!pressed)
