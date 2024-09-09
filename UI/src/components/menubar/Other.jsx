@@ -25,7 +25,6 @@ import { SendMessageToBackground } from "../../../../src/contentScript"
 
 let storageData = {
   isHex: true,
-  displayGridLines: true,
   isREM: false,
 }
 
@@ -92,11 +91,31 @@ function RGBOrHex({ isHex, setIsHex }) {
 }
 
 function DisplayGridLines({ displayGridLines, setdisplayGridLines }) {
+  const applyGridLines = () => {
+    let styleElement = document.querySelector("#injected-grid-lines-css")
+
+    if (!styleElement) {
+      styleElement = document.createElement("style")
+      styleElement.id = "injected-grid-lines-css"
+      document.head.appendChild(styleElement)
+    }
+
+    styleElement.textContent = displayGridLines
+      ? `
+      *:not(body):not(html):not(#css-selector-root-9524):not(#data-radix-popper-content-wrapper):not(#css-selector-root-9524 *):not(#data-radix-popper-content-wrapper *) {
+        border: 1px solid red !important;
+      }
+    `
+      : ``
+  }
+
   const customSetDisplayGridLines = () => {
-    storageData.displayGridLines = !displayGridLines
-    UpdateStorage(storageData)
     setdisplayGridLines(!displayGridLines)
   }
+
+  useEffect(() => {
+    applyGridLines()
+  }, [displayGridLines])
 
   return (
     <Toggle
@@ -181,7 +200,6 @@ export default function Other({ options }) {
     }
 
     setIsHex(options.isHex)
-    setdisplayGridLines(options.displayGridLines)
     setIsREM(options.isREM)
   }, [options])
 

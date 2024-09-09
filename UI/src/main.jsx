@@ -11,10 +11,12 @@ UIdoc.style.maxWidth = "385px"
 UIdoc.style.display = "block"
 document.body.appendChild(UIdoc)
 
-
+let menuContainer = document.createElement("div")
+menuContainer.id = "data-radix-popper-content-wrapper"
+document.body.appendChild(menuContainer)
 
 createRoot(UIdoc).render(
   <StrictMode>
-    <App {...{ UIdoc }}/>
+    <App {...{ UIdoc }} />
   </StrictMode>
 )

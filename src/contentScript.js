@@ -23,6 +23,8 @@
 // TODO: picker getting toggled multiple times when the popup is closed and opened
 // TODO: Go through a chrome extension to see any best practices
 // TODO: How to update without needing to go through chrome webstore checking
+// TODO: Add a minimize button
+// TODO: Why not add all the injected UI to a shadow DOM?
 
 import { ElementPicker } from "pick-dom-element"
 import FormatCSS from "./utils/logicalToTraditionalCSS.js"
@@ -119,7 +121,7 @@ function StartPicker() {
     elementFilter: (element) => {
       if (
         element.closest("#css-selector-root-9524") ||
-        element.closest(".menu-open")
+        element.closest("#data-radix-popper-content-wrapper")
       ) {
         return false
       }
@@ -293,3 +295,4 @@ export function GoUpSelector() {
 export function GoDownSelector() {
   picker.goDownSelector(elementData.currentElement)
 }
+

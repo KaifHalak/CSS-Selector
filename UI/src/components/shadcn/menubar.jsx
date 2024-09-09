@@ -1,4 +1,5 @@
 import * as React from "react"
+import { useEffect } from "react"
 import * as MenubarPrimitive from "@radix-ui/react-menubar"
 import { Check, ChevronRight, Circle } from "lucide-react"
 
@@ -73,7 +74,7 @@ const MenubarContent = React.forwardRef(
     { className, align = "start", alignOffset = -4, sideOffset = 8, ...props },
     ref
   ) => (
-    <MenubarPrimitive.Portal>
+    <MenubarPrimitive.Portal container={document.querySelector("#data-radix-popper-content-wrapper")}>
       <MenubarPrimitive.Content
         ref={ref}
         align={align}
