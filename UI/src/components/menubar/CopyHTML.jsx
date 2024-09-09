@@ -1,22 +1,54 @@
-import React, { useState, useContext } from "react"
+import React, { useState, useContext, useEffect } from "react"
 import { MenubarContent, MenubarMenu, MenubarTrigger } from "../shadcn/menubar"
 
 import { Toggle } from "../shadcn/toggle"
 import { Button } from "../shadcn/button"
 
 import { TOGGLE_PROPS } from "./commonValues"
-import { CopyElement } from "../../../../src/contentScript"
+import {
+  CopyElement,
+  SendMessageToBackground,
+} from "../../../../src/contentScript"
 
-export default function CopyHTML() {
+export default function CopyHTML({ options }) {
   const [isHTML, setIsHTML] = useState(true)
   const [isIncludeChildren, setIsIncludeChildren] = useState(false)
 
+  useEffect(() => {
+    if (!options) {
+      return
+    }
+
+    setIsHTML(options.isHTML)
+    setIsIncludeChildren(options.isIncludeChildren)
+  }, [options])
+
+  const updateStorage = (data) => {
+    SendMessageToBackground("update-copyHTML", data)
+  }
+
   const customSetIsJSX = () => {
+
+    if (!isHTML){
+      return
+    }
+
+    updateStorage({ isHTML: false, isIncludeChildren })
     setIsHTML(false)
   }
 
   const customSetHTML = () => {
+    if (isHTML){
+      return
+    }
+
+    updateStorage({ isHTML: true, isIncludeChildren })
     setIsHTML(true)
+  }
+
+  const customSetIsIncludeChildren = () => {
+    updateStorage({ isHTML, isIncludeChildren: !isIncludeChildren })
+    setIsIncludeChildren(!isIncludeChildren)
   }
 
   const onClickCopy = () => {
@@ -55,7 +87,7 @@ export default function CopyHTML() {
 
           <Toggle
             pressed={isIncludeChildren}
-            onPressedChange={setIsIncludeChildren}
+            onPressedChange={customSetIsIncludeChildren}
             {...TOGGLE_PROPS}
           >
             Include Children

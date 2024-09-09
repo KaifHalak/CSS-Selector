@@ -19,10 +19,21 @@ import {
 } from "../../../../src/utils/PxRMConversion"
 
 import { RGBHexConverter } from "../../../../src/utils/RGBHexConverter"
+import { SendMessageToBackground } from "../../../../src/contentScript"
 
 // TODO: Store the toggle settings
 
-function RGBOrHex() {
+let storageData = {
+  isHex: true,
+  displayGridLines: true,
+  isREM: false,
+}
+
+function UpdateStorage(data) {
+  SendMessageToBackground("update-other", data)
+}
+
+function RGBOrHex({ isHex, setIsHex }) {
   const elementStyle = useContext(ElementStylesContext)
 
   const styleValues = elementStyle[0]
@@ -30,22 +41,27 @@ function RGBOrHex() {
 
   // let { cssObject, tw } = styleValues
 
-  const [isHex, setIsHex] = useState(true)
-
   const customSetIsRGB = () => {
-    if (!styleValues) {
+    if (!styleValues || !isHex) {
       return
     }
 
     let { cssObject, tw } = RGBHexConverter(styleValues, false)
+
+    storageData.isHex = false
+    UpdateStorage(storageData)
+
     setStyleValues({ cssObject, tw })
     setIsHex(false)
   }
 
   const customSetIsHex = () => {
-    if (!styleValues) {
+    if (!styleValues || isHex) {
       return
     }
+
+    storageData.isHex = true
+    UpdateStorage(storageData)
 
     let { cssObject, tw } = RGBHexConverter(styleValues, true)
     setStyleValues({ cssObject, tw })
@@ -75,13 +91,17 @@ function RGBOrHex() {
   )
 }
 
-function DisplayGridLines() {
-  const [displayGridLines, setdisplayGridLines] = useState(true)
+function DisplayGridLines({ displayGridLines, setdisplayGridLines }) {
+  const customSetDisplayGridLines = () => {
+    storageData.displayGridLines = !displayGridLines
+    UpdateStorage(storageData)
+    setdisplayGridLines(!displayGridLines)
+  }
 
   return (
     <Toggle
       pressed={displayGridLines}
-      onPressedChange={setdisplayGridLines}
+      onPressedChange={customSetDisplayGridLines}
       {...TOGGLE_PROPS}
     >
       Grid lines
@@ -89,7 +109,7 @@ function DisplayGridLines() {
   )
 }
 
-function PxOrRM() {
+function PxOrRM({ isREM, setIsREM }) {
   const elementStyle = useContext(ElementStylesContext)
 
   const styleValues = elementStyle[0]
@@ -97,12 +117,13 @@ function PxOrRM() {
 
   let { cssObject, tw } = styleValues
 
-  const [isREM, setIsREM] = useState(false)
-
   const customSetIsPx = () => {
-    if (!styleValues) {
+    if (!styleValues || !isREM) {
       return
     }
+
+    storageData.isREM = false
+    UpdateStorage(storageData)
 
     cssObject = ConvertRemToPx(cssObject)
     tw = ConvertRemToPx(tw)
@@ -111,9 +132,12 @@ function PxOrRM() {
   }
 
   const customSetIsREM = () => {
-    if (!styleValues) {
+    if (!styleValues || isREM) {
       return
     }
+
+    storageData.isREM = true
+    UpdateStorage(storageData)
 
     cssObject = ConvertPxToRem(cssObject)
     tw = ConvertPxToRem(tw) // Notice this was wrong before (rem -> rem); updated it
@@ -145,17 +169,31 @@ function PxOrRM() {
   )
 }
 
-export default function Other() {
+export default function Other({ options }) {
+  // TODO: Is it better to combine these into 1?
+  const [isHex, setIsHex] = useState(true)
+  const [displayGridLines, setdisplayGridLines] = useState(false)
+  const [isREM, setIsREM] = useState(false)
+
+  useEffect(() => {
+    if (!options) {
+      return
+    }
+
+    setIsHex(options.isHex)
+    setdisplayGridLines(options.displayGridLines)
+    setIsREM(options.isREM)
+  }, [options])
+
   return (
     <MenubarMenu>
       <MenubarTrigger>Other</MenubarTrigger>
       <MenubarContent>
         <div className="space-y-1">
-          <RGBOrHex />
-          <Separator />
-          <PxOrRM />
-          <Separator />
-          <DisplayGridLines />
+          {/* It will get unmounted when the menu is closed. So the states should be in this function instead */}
+          <RGBOrHex {...{ isHex, setIsHex }} />
+          <PxOrRM {...{ isREM, setIsREM }} />
+          <DisplayGridLines {...{ displayGridLines, setdisplayGridLines }} />
         </div>
       </MenubarContent>
     </MenubarMenu>

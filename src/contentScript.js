@@ -20,6 +20,9 @@
 // TODO: The selector causes a bobbing effect (not smooth)
 // TODO: You should still be able to use inspect element when the picker is active
 // TODO: Convert Px to rm and vice versa when copying html
+// TODO: picker getting toggled multiple times when the popup is closed and opened
+// TODO: Go through a chrome extension to see any best practices
+// TODO: How to update without needing to go through chrome webstore checking
 
 import { ElementPicker } from "pick-dom-element"
 import FormatCSS from "./utils/logicalToTraditionalCSS.js"
@@ -144,6 +147,27 @@ function MessagesFromBackground() {
       sendResponse({ status: "active" })
       TogglePicker()
     }
+  })
+}
+
+export function SendMessageToBackground(type, data = {}) {
+  return new Promise((resolve, reject) => {
+    chrome.runtime.sendMessage({ type, data }, (response) => {
+      console.log("Response from background script:", response)
+
+      if (chrome.runtime.lastError) {
+        // Handle any errors that occurred
+        console.error("Error sending message:", chrome.runtime.lastError)
+        reject(chrome.runtime.lastError)
+      } else {
+        // Resolve the promise with the response data
+        if (response.data) {
+          resolve(response.data)
+        } else {
+          resolve(response)
+        }
+      }
+    })
   })
 }
 
